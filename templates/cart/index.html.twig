@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Votre panier
+{% endblock %}
+
+{% block body %}
+    <div class="alert alert-light">
+        <h1 class="alert-light">Votre Panier</h1>
+    </div>
+
+    <table class="table table-stripped">
+        <thead>
+            <tr>
+                <td>Produit</td>
+                <td>Prix unitaire</td>
+                <td>Quantité</td>
+                <td>Total</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{ item.product.title }}</td>
+                    <td>{{ item.product.price / 100  }}</td>
+                    <td>
+                        <a href="{{ path('cart_remove', {'slug': item.product.slug}) }}" class="btn btn-primary">
+                            <i class="fas fa-minus"></i>
+                        </a>
+                        {{ item.quantity }}
+                        <a href="{{ path('cart_add', {'slug': item.product.slug}) }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                    </td>
+                    <td>{{ item.total / 100 }}&euro;</td>
+                    <td>
+                        <a href="{{ path('cart_remove', {'slug': item.product.slug}) }}" class="btn btn-danger">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-right">Total :</td>
+                <td>{{ total / 100 }}&euro;</td>
+            </tr>
+        </tfoot>
+    </table>
+{% endblock %}
+{% block sidebar %}
+    <div class="alert alert-light">
+        <h2 class="alert-title">Adresse de livraison</h2>
+    </div>
+{% endblock %}

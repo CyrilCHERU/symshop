@@ -1,0 +1,38 @@
+<div class="alert alert-light">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2 class="alert-title">Votre panier :</h2>
+        <a href="{{ path('cart_empty') }}" class="text-light btn btn-danger float-right">
+            <i class="fas fa-trash"></i>
+        </a>
+
+    </div>
+
+
+    {% for item in cartManager.all %}
+        <div class="cart">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                <strong>
+                    <a href="{{ path('cart_remove', {'slug': item.product.slug}) }}" class="btn btn-danger text-light">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                    {{ item.quantity}}
+                    x
+                    {{ item.product.title }}</strong>
+                <span class="badge badge-dark">{{ (item.total) / 100}}&euro;</span>
+            </div>
+        </div>
+    {% endfor %}
+
+    <hr>
+    <div class="cart text-center">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <strong>TOTAL</strong>
+            <span class="badge badge-dark">{{ cartManager.total / 100 }}&euro;</span>
+        </div>
+        <a href="#" style="text-decoration: none;" class="btn btn-success text-light">Commander
+            <i class="fas fa-credit-card"></i>
+        </a>
+    </div>
+</div>

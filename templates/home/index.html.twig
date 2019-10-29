@@ -1,49 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!
+{% block title %}Accueil
 {% endblock %}
 
 {% block body %}
-    <div class="alert alert-light">
-        <h1 class="alert-title">Nos produits phares</h1>
+    <div class="alert">
+        <h1 class="alert-title text-dark">Nos produits phares</h1>
     </div>
-    <div class="row">
+    <div class="row align-self-stretch">
         {% for p in featured %}
-            <div class="col-md-3">
-                <img src="{{ p.image }}" alt="{{ p.title | escape }}" class="img-fluid rounded">
+            <div class="col-md-5 mb-4 alert-light ml-2 rounded">
+                <img src="{{ p.image }}" alt="{{ p.title | escape }}" class="mt-2 img-fluid rounded">
                 <h3>{{ p.title }}
-                    ({{ p.price / 100 }})</h3>
+                    {{ p.price / 100 }}&euro;</h3>
                 <p>{{ p.introduction }}</p>
                 <hr>
-                <a href="#" class="btn btn-primary">
-                    <i class="fas fa-search"></i>Plus d'info
-                </a>
-                <a href="#" class="btn btn-success">
-                    <i class="fas fa-shopping-cart"></i>Ajouter
-                </a>
+                <div class="text-center">
+                    <a href="{{ path('product_show', {'slug': p.slug }) }}" class="btn btn-primary text-light">Plus d'info
+                        <i class="fas fa-search"></i>
+                    </a>
+                    <a href="{{ path('cart_add', {'slug': p.slug}) }}" class="btn btn-success text-light">Ajouter
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
+                </div>
+
             </div>
         {% endfor %}
     </div>
-    {% for c in categories %}
-        <div class="alert alert-light">
-            <h2 class="alert-title">{{ c.title }}</h2>
-            <div class="row">
-                {% for p in c.products %}
-                    <div class="col-md-3 my-3">
-                        <img src="{{ p.image }}" alt="{{ p.title | escape }}" class="img-fluid rounded">
-                        <h3>{{ p.title }}
-                            ({{ p.price / 100 }})</h3>
-                        <p>{{ p.introduction }}</p>
-                        <hr>
-                        <a href="#" class="btn btn-primary">
-                            <i class="fas fa-search"></i>Plus d'info
-                        </a>
-                        <a href="#" class="btn btn-success">
-                            <i class="fas fa-shopping-cart"></i>Ajouter
-                        </a>
-                    </div>
-                {% endfor %}
-            </div>
+    <div class="row">
+        <div class="col text-center mt-5">
+            <h1 class="text-dark">Nos produits par catégorie</h1>
         </div>
-    {% endfor %}
+        {% for c in categories %}
+            <div class="alert alert-light">
+                <h2 class="alert-title text-dark">{{ c.title }}</h2>
+                <div class="row d-flex align-content-start flex-wrap">
+                    {% for p in c.products %}
+                        <div class="col-md-4 mb-3">
+                            <img src="{{ p.image }}" alt="{{ p.title | escape }}" class="img-fluid rounded">
+                            <h3 class="text-dark">{{ p.title }}
+                                {{ p.price / 100 }}&euro;</h3>
+                            <p class="text-dark">{{ p.introduction }}</p>
+                            <hr>
+                            <a href="{{ path('product_show', {'slug': p.slug }) }}" class="btn btn-primary">
+                                <i class="fas fa-search"></i>Plus d'info
+                            </a>
+                            <a href="{{ path('cart_add', {'slug': p.slug}) }}" class="btn btn-success">
+                                <i class="fas fa-shopping-cart"></i>Ajouter
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
 {% endblock %}

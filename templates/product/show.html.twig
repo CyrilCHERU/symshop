@@ -1,9 +1,30 @@
 {% extends "base.html.twig" %}
 
 {% block title %}
+    Détails de
     {{ product.title }}
+
 {% endblock %}
 
 {% block body %}
-    <h1>{{ product.title }}</h1>
+    <div class="alert alert-light">
+        <h1 class="alert-title">{{ product.title }}
+            -
+            {{ product.price / 100 }}&euro;</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <img src="{{ product.image }}" alt="" class="img-fluid">
+            <a href="" class="btn btn-success mt-3">Ajouter
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+        </div>
+        <div class="col">
+            <p class="font-weight-bold">{{ product.introduction }}</p>
+            <hr>
+            {{ product.description | nl2br }}
+        </div>
+    </div>
+
 {% endblock %}
