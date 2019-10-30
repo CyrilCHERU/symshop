@@ -12,7 +12,7 @@
             <div class="col-md-5 mb-4 alert-light ml-2 rounded">
                 <img src="{{ p.image }}" alt="{{ p.title | escape }}" class="mt-2 img-fluid rounded">
                 <h3>{{ p.title }}
-                    {{ p.price / 100 }}&euro;</h3>
+                    {{ p.price | price }}</h3>
                 <p>{{ p.introduction }}</p>
                 <hr>
                 <div class="text-center">
@@ -39,7 +39,7 @@
                         <div class="col-md-4 mb-3">
                             <img src="{{ p.image }}" alt="{{ p.title | escape }}" class="img-fluid rounded">
                             <h3 class="text-dark">{{ p.title }}
-                                {{ p.price / 100 }}&euro;</h3>
+                                {{ p.price | price }}</h3>
                             <p class="text-dark">{{ p.introduction }}</p>
                             <hr>
                             <a href="{{ path('product_show', {'slug': p.slug }) }}" class="btn btn-primary">

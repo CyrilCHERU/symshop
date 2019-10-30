@@ -31,6 +31,9 @@ services:
         arguments:
             $key: '%env(resolve:STRIPE_KEY_TEST)%'
 
+    App\Twig\AppExtension:
+        tags:
+            - "twig.extensions"
     App\Event\Doctrine\CategorySlugListener:
         tags:
             - { 

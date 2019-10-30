@@ -31,6 +31,8 @@ class CartController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $order = $form->getData();
+            // ajout du user a l order
+            $order->setUser($this->getUser());
             // converti les produits du panier en entité orderItem et sauvegarde le tout
             $cartConverter->convertAndSaveToOrder($order);
 
