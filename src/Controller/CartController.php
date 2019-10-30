@@ -78,7 +78,7 @@ class CartController extends AbstractController
      */
     public function empty(CartManager $cartManager, Request $request)
     {
-        $cartManager->empty($cart);
+        $cartManager->empty();
 
         if ($referer = $request->server->get('HTTP_REFERER', null)) {
             return $this->redirect($referer);

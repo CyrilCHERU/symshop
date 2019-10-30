@@ -72,9 +72,9 @@ class CartManager
      *
      * @return void
      */
-    public function empty($cart)
+    public function empty()
     {
-        $this->save($cart);
+        $this->session->set('cart', []);
     }
 
     /**
