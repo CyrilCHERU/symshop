@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Cart\CartConverter;
 use App\Cart\CartManager;
 use App\Entity\OrderInfo;
-use App\Entity\OrderItem;
 use App\Entity\Product;
 use App\Form\ShippingType;
 use App\Payment\StripeService;

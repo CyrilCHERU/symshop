@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Enregistrement
+{% endblock %}
+
+{% block body %}
+    <h1>Enregistrement</h1>
+    <div class="row">
+        <div class="col">
+            {{ form_start(form) }}
+
+            {{ form_widget(form) }}
+
+            <button type="submit" class="btn btn-success">Inscription</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
