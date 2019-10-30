@@ -2,22 +2,49 @@
 
 namespace App\Controller;
 
+use App\Cart\CartConverter;
 use App\Cart\CartManager;
+use App\Entity\OrderInfo;
+use App\Entity\OrderItem;
 use App\Entity\Product;
+use App\Form\ShippingType;
+use App\Payment\StripeService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class CartController extends AbstractController
 {
     /**
      * @Route("/cart", name="cart_index")
      */
-    public function index(CartManager $cartManager)
-    {
+    public function index(
+        CartManager $cartManager,
+        Request $request,
+        CartConverter $cartConverter,
+        SessionInterface $session
+    ) {
+        $form = $this->createForm(ShippingType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $order = $form->getData();
+            // converti les produits du panier en entité orderItem et sauvegarde le tout
+            $cartConverter->convertAndSaveToOrder($order);
+
+            // Ajout de la commande en session pour l'avoir sous la main
+            $session->set('currentOrder', $order);
+
+            return $this->redirectToRoute('cart_payment', ['id' => $order->getId()]);
+        }
+
         return $this->render("cart/index.html.twig", [
             'items' => $cartManager->all(),
-            'total' => $cartManager->getTotal()
+            'total' => $cartManager->getTotal(),
+            'form' => $form->createView()
         ]);
     }
 
@@ -76,5 +103,64 @@ class CartController extends AbstractController
         }
 
         return $this->redirectToRoute('cart_index');
+    }
+
+    /**
+     * @Route("/cart/payment", name="cart_payment")
+     *
+     * @param SessionInterface $session
+     * @return void
+     */
+    public function payment(SessionInterface $session)
+    {
+
+        $order = $session->get('currentOrder');
+
+        return $this->render('cart/payment.html.twig', [
+            'order' => $order
+        ]);
+    }
+
+    /**
+     * @Route("/cart/success", name="cart_success")
+     *
+     * @return void
+     */
+    public function success(SessionInterface $session, EntityManagerInterface $em)
+    {
+        // On change le status de la commande
+        $order = $em->merge($session->get('currentOrder'));
+        $order->setStatus(OrderInfo::STATUS_PAYMENT_VALIDATED);
+
+        $em->flush();
+
+        // on vide le panier et la session
+
+        $session->remove('currentOrder');
+        $session->remove('cart');
+
+        // On affiche Bravo
+
+        return $this->render('cart/success.html.twig');
+    }
+
+    /**
+     * @Route("/cart/process", name="cart_process")
+     *
+     * @return void
+     */
+    public function process(Request $request, StripeService $stripe)
+    {
+        $session = $request->getSession();
+        $order = $session->get('currentOrder');
+        $token = $request->request->get('stripeToken');
+
+        $paid = $stripe->processCharge($order->getTotal(), $token, "Paiement d'exemple");
+
+        if (!$paid) {
+            return $this->redirectToRoute("cart_payment");
+        }
+
+        return $this->redirectToRoute("cart_success");
     }
 }

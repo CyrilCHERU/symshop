@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'sidebar.html.twig' %}
 
 {% block title %}Votre panier
 {% endblock %}
@@ -53,5 +53,16 @@
 {% block sidebar %}
     <div class="alert alert-light">
         <h2 class="alert-title">Adresse de livraison</h2>
+    </div>
+    <div class="col">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="text-center">
+            <button class="btn btn-success" type="submit">Valider
+                <i class="fas fa-check"></i>
+            </button>
+        </div>
+
+        {{ form_end(form) }}
     </div>
 {% endblock %}

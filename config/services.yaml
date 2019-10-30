@@ -27,6 +27,10 @@ services:
     # please note that last definitions always *replace* previous ones
     Cocur\Slugify\Slugify: ~
 
+    App\Payment\StripeService:
+        arguments:
+            $key: '%env(resolve:STRIPE_KEY_TEST)%'
+
     App\Event\Doctrine\CategorySlugListener:
         tags:
             - { 
